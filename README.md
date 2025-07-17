@@ -15,3 +15,7 @@ The platform will include seller profiles, product listings with images, prices,
 
 
 https://byupathwayworldwideprod-my.sharepoint.com/:w:/g/personal/clin1_byupathway_edu/Efim9R-Np4VMj8uNT5KHAjgBLP_Nqd_QDwMrOgtvCF-vpg?e=3QwjQJ
+
+
+
+Prueba
