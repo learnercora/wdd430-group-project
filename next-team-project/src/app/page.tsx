@@ -1,8 +1,72 @@
+'use client'
+
 import styles from './ui/page.module.css';
+import { useState } from 'react';
 
 export default function Home() {
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearch = () => {
+    console.log('search：', searchTerm);
+  };
+  const handleAuthClick = () => {
+    setIsLoggedIn((prev) => !prev);
+  };
+
   return (
     <>
+      <header style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '1rem 2rem',
+        backgroundColor: '#ffffff',
+        borderBottom: '1px solid #ddd',
+        position: 'sticky',
+        top: 0,
+        zIndex: 1000
+      }}>
+        <div style={{ fontSize: '1.5rem', fontWeight: 900 }}>
+          Artisan Market
+        </div>
+
+        <input
+          type="text"
+          placeholder="Search products..."
+          style={{
+            padding: '0.5rem 1rem',
+            border: '1px solid #ccc',
+            borderRadius: '999px',
+            width: '40%',
+            maxWidth: '400px',
+            fontSize: '1rem'
+          }}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleSearch();
+            }
+          }}
+        />
+
+        <button
+          onClick={handleAuthClick}
+          style={{
+            padding: '0.5rem 1rem',
+            backgroundColor: '#333',
+            color: 'white',
+            border: 'none',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontSize: '1rem'
+          }}
+        >
+          {isLoggedIn ? 'Logout' : 'Login'}
+        </button>
+      </header>
+
       <main className={styles.page}>
         <section className={styles.hero}>
           <div className={styles.textContainer}>
