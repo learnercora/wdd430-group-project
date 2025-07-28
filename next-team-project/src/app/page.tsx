@@ -2,6 +2,8 @@
 
 import styles from './ui/page.module.css';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 export default function Home() {
 
@@ -11,8 +13,11 @@ export default function Home() {
   const handleSearch = () => {
     console.log('search：', searchTerm);
   };
+
+  const router = useRouter();
+
   const handleAuthClick = () => {
-    setIsLoggedIn((prev) => !prev);
+    router.push('/sign-in');
   };
 
   return (
