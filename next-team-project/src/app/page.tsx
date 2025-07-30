@@ -16,9 +16,18 @@ export default function Home() {
 
   const router = useRouter();
 
-  const handleAuthClick = () => {
-    router.push('/sign-in');
-  };
+const handleAuthClick = () => {
+  if (isLoggedIn) {
+    // Sign out and go to home
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('username');
+    setIsLoggedIn(false);
+    router.push('/'); // <-- Redirects to home page
+  } else {
+    // If not logged in, go to login page
+    router.push('/login');
+  }
+};
 
   return (
     <>
