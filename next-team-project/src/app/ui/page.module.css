@@ -46,7 +46,7 @@
   margin-bottom: 2rem;
   line-height: 1.5;
 }
-
+/* 
 .button {
   background-color: var(--accent);
   color: #ffffff;
@@ -66,7 +66,7 @@
 .button:hover {
   background-color: var(--accent-hover);
   transform: scale(1.05);
-}
+} */
 
 .footer {
   text-align: center;
