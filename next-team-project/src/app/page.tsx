@@ -43,7 +43,7 @@ const handleAuthClick = () => {
         zIndex: 1000
       }}>
         <div style={{ fontSize: '1.5rem', fontWeight: 900 }}>
-          Artisan Market
+          Handcrafted Haven
         </div>
 
         <input
@@ -109,7 +109,7 @@ const handleAuthClick = () => {
         color: "#000000ff",
         marginTop: "2rem"
       }}>
-        <p>&copy; 2025 Artisan Marketplace. All rights reserved.</p>
+        <p>&copy; 2025 Handcrafted Haven. All rights reserved.</p>
         <p>
           <a href="/about" style={{ color: "#000000ff", textDecoration: "none", margin: "0 0.5rem" }}>About Us</a> |
           <a href="/contact" style={{ color: "#000000ff", textDecoration: "none", margin: "0 0.5rem" }}>Contact</a>
