@@ -24,7 +24,7 @@ export default function ArtistsPage() {
   }, [search]);
 
   const handleArtistClick = (name: string) => {
-    router.push(`/artworks?page=1&sort=desc&search=${encodeURIComponent(name)}`);
+    router.push(`/artworks/artist/${encodeURIComponent(name)}`);
   };
 
   return (

@@ -2,26 +2,32 @@ import { NextResponse } from 'next/server';
 import { sql } from '@vercel/postgres';
 
 export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const search = searchParams.get('search') || '';
+  try {
+    const { searchParams } = new URL(req.url);
+    const search = searchParams.get('search') || '';
 
-  let whereClause = '';
-  const params: (string | number)[] = [];
+    let whereClause = '';
+    const params: string[] = [];
 
-  if (search) {
-    whereClause = `WHERE artist_name ILIKE $1`;
-    params.push(`%${search}%`);
+    if (search) {
+      whereClause = `WHERE a.name ILIKE $1`;
+      params.push(`%${search}%`);
+    }
+
+    const query = `
+      SELECT a.name AS artist_name, a.artist_description, COUNT(p.id) as product_count
+      FROM artists a
+      LEFT JOIN products p ON p.artist_name = a.name
+      ${whereClause}
+      GROUP BY a.name, a.artist_description
+      ORDER BY a.name ASC
+    `;
+
+    const result = await sql.query(query, params);
+
+    return NextResponse.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: 'Error fetching artists' }, { status: 500 });
   }
-
-  const query = `
-    SELECT artist_name, COUNT(*) as product_count
-    FROM products
-    ${whereClause}
-    GROUP BY artist_name
-    ORDER BY artist_name ASC
-  `;
-
-  const result = await sql.query(query, params);
-
-  return NextResponse.json(result.rows);
 }

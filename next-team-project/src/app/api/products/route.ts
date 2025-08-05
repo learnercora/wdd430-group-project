@@ -3,48 +3,49 @@ import { sql } from '@vercel/postgres';
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-
   const page = parseInt(searchParams.get('page') || '1');
-  const sort = searchParams.get('sort') || 'asc';  //filter
-  const search = searchParams.get('search') || ''; //search
-
   const limit = 15;
   const offset = (page - 1) * limit;
 
+  const sort = searchParams.get('sort') || 'asc';
+  const search = searchParams.get('search') || '';
+  const category = searchParams.get('category') || '';
+
   let whereClause = '';
-  let params: (string | number)[] = [];
-  let countParams: (string | number)[] = [];
+  const params: (string | number)[] = [];
 
   if (search) {
-    whereClause = `WHERE name ILIKE $1 OR artist_name ILIKE $1`;
-    params = [`%${search}%`, limit, offset];
-    countParams = [`%${search}%`];
-  } else {
-    params = [limit, offset];
+    params.push(`%${search}%`);
+    whereClause += `WHERE name ILIKE $${params.length} OR artist_name ILIKE $${params.length}`;
+  }
+
+  if (category) {
+    params.push(category);
+    whereClause += `${whereClause ? ' AND' : 'WHERE'} category = $${params.length}`;
   }
 
   const productsQuery = `
-    SELECT *
-    FROM products
+    SELECT * FROM products
     ${whereClause}
     ORDER BY price ${sort.toUpperCase()}
-    LIMIT ${search ? '$2' : '$1'} OFFSET ${search ? '$3' : '$2'}
+    LIMIT $${params.length + 1} OFFSET $${params.length + 2}
   `;
+
+  params.push(limit, offset);
 
   const products = await sql.query(productsQuery, params);
 
-  const countQuery = `
-    SELECT COUNT(*)
-    FROM products
+  const totalQuery = `
+    SELECT COUNT(*) FROM products
     ${whereClause}
   `;
-
-  const total = await sql.query(countQuery, countParams);
-  const totalCount = parseInt(total.rows[0].count);
+  const total = await sql.query(totalQuery, params.slice(0, params.length - 2));
 
   return NextResponse.json({
     products: products.rows,
-    totalPages: Math.ceil(totalCount / limit),
+    totalPages: Math.ceil(parseInt(total.rows[0].count) / limit),
     currentPage: page,
   });
 }
+
+
