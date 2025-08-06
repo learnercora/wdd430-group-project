@@ -3,16 +3,11 @@
 import styles from './ui/page.module.css';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSearchParams } from 'next/navigation';
 
 export default function Home() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
 
-  const handleSearch = () => {
-    console.log('search：', searchTerm);
-  };
 
   const router = useRouter();
 
@@ -46,48 +41,73 @@ const handleAuthClick = () => {
           Handcrafted Haven
         </div>
 
-        <input
-          type="text"
-          placeholder="Search products..."
-          style={{
-            padding: '0.5rem 1rem',
-            border: '1px solid #ccc',
-            borderRadius: '999px',
-            width: '40%',
-            maxWidth: '400px',
-            fontSize: '1rem'
-          }}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              handleSearch();
-            }
-          }}
-        />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <button
+              onClick={handleAuthClick}
+              style={{
+                padding: '0.5rem 1rem',
+                backgroundColor: '#333',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '1rem'
+              }}
+            >
+              {isLoggedIn ? 'Logout' : 'Login'}
+            </button>
 
-        <button
-          onClick={handleAuthClick}
-          style={{
-            padding: '0.5rem 1rem',
-            backgroundColor: '#333',
-            color: 'white',
-            border: 'none',
-            borderRadius: '8px',
-            cursor: 'pointer',
-            fontSize: '1rem'
-          }}
-        >
-          {isLoggedIn ? 'Logout' : 'Login'}
-        </button>
+            <button
+              onClick={() => router.push('/sign-in')}
+              style={{
+                padding: '0.5rem 1rem',
+                backgroundColor: '#333',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '1rem'
+              }}
+            >
+              Sign In
+            </button>
+        </div>
+
       </header>
 
-      <main className={styles.page}>
-        <section className={styles.hero}>
-          <div className={styles.textContainer}>
-            <h1 className={styles.title}>Crafted with Care</h1>
-            <p className={styles.subtitle}>Support artisanal products with a heart.</p>
-            <button className={styles.button}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 24 24" style={{ marginRight: '8px' }}>
+          <main className={styles.page}>
+            <section className={styles.hero}>
+              <div className={styles.textContainer}>
+              <h1 className={styles.title}>Crafted with Care</h1>
+              <p className={styles.subtitle}>Support artisanal products with a heart.</p>
+
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+            <button
+              className={styles.button}
+              style={{
+                backgroundColor: 'rgb(184, 92, 56)',
+                color: 'white',
+                border: 'none',
+                padding: '0.75rem 1.5rem',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                transition: 'background-color 0.3s ease'
+              }}
+              onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#e56f42')}
+              onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#ff7f50')}
+              onClick={() => router.push('/artworks')}
+
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                fill="white"
+                viewBox="0 0 24 24"
+                style={{ marginRight: '8px' }}
+              >
                 <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 
                   0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.82 
                   14h8.96c.75 0 1.41-.41 1.75-1.03l3.58-6.49a.998.998 0 
@@ -98,8 +118,9 @@ const handleAuthClick = () => {
               <span>Shop Products</span>
             </button>
           </div>
-        </section>
-      </main>
+        </div>
+      </section>
+    </main>
 
       <footer style={{
         backgroundColor: "#f5f5f5",
