@@ -44,3 +44,18 @@ button:hover {
 * {
   box-sizing: border-box;
 } */
+
+.createAccountLink {
+  margin-left: 0.5rem;
+  cursor: pointer;
+  color: var(--accent);
+  background-color: red;
+  font-weight: 500;
+  transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.createAccountLink:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+  background-color: red;
+}

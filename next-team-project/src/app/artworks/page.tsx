@@ -74,7 +74,7 @@ export default function ArtworkPage() {
           type="text"
           value={search}
           onChange={handleSearchChange}
-          placeholder="search by product or artist..."
+          placeholder="Search by product or artist..."
           className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-black w-full sm:w-1/3"
         />
 
@@ -99,7 +99,7 @@ export default function ArtworkPage() {
                 d="M3 4h18M6 8h12M9 12h6m-3 4h0"
               />
             </svg>
-            price: {sort === 'asc' ? 'low to high' : 'high to low'}
+            Price: {sort === 'asc' ? 'Low to High' : 'High to Low'}
           </button>
 
           {/* category filter */}
@@ -108,7 +108,7 @@ export default function ArtworkPage() {
             onChange={handleCategoryChange}
             className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-black"
           >
-            <option value="">all categories</option>
+            <option value="">All Categories</option>
             <option value="Clothing">clothing</option>
             <option value="HomeDecor">home decor</option>
             <option value="Jewelry">jewelry</option>

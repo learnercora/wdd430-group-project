@@ -5,34 +5,59 @@ import { useRouter } from 'next/navigation';
 export default function SignInPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    name: '',
     email: '',
+    password: '',
+    confirmPassword: ''
   });
+  const [error, setError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('User Info:', formData);
-    // Add real login logic here
-    router.push('/'); // Redirect to home
+
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    const res = await fetch('/api/auth/sign-up', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password
+      })
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      setError(data.error || 'Failed to register');
+      return;
+    }
+
+    // guardar datos en localStorage
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('email', formData.email);
+    localStorage.setItem('username', formData.name);
+
+    router.push('/artworks');
   };
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '500px', margin: 'auto' }}>
-      <h2 style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>Sign In</h2>
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+    <div className="p-6 max-w-md mx-auto">
+      <h1 className="text-2xl mb-4">Sign In</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"
-          name="firstName"
+          name="name"
           placeholder="Name"
-          value={formData.firstName}
+          className="w-full border p-2"
+          value={formData.name}
           onChange={handleChange}
           required
         />
@@ -40,11 +65,31 @@ export default function SignInPage() {
           type="email"
           name="email"
           placeholder="Email Address"
+          className="w-full border p-2"
           value={formData.email}
           onChange={handleChange}
           required
         />
-        <button type="submit" style={{ padding: '0.5rem', backgroundColor: '#333', color: 'white', border: 'none' }}>
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          className="w-full border p-2"
+          value={formData.password}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          className="w-full border p-2"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          required
+        />
+        {error && <p className="text-red-500">{error}</p>}
+        <button type="submit" className="bg-black text-white px-4 py-2 w-full">
           Sign In
         </button>
       </form>
