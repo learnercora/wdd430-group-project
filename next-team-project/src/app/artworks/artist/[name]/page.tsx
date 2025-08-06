@@ -8,6 +8,7 @@ interface Artist {
   artist_name: string;
   artist_description: string;
   product_count: number;
+  image_url?: string; // ahora puede venir desde la BD
 }
 
 export default function ArtistDetailPage() {
@@ -38,7 +39,7 @@ export default function ArtistDetailPage() {
   return (
     <div className="p-6 flex flex-col items-start gap-4">
       <Image
-        src="/artist-img.jpg"
+        src={artist.image_url || '/artist-img.jpg'} 
         alt={artist.artist_name}
         width={150}
         height={150}

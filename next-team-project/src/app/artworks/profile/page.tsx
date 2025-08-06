@@ -7,12 +7,13 @@ import Image from 'next/image';
 export default function ProfilePage() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
   const router = useRouter();
 
   const email = typeof window !== 'undefined' ? localStorage.getItem('email') : null;
   const name = typeof window !== 'undefined' ? localStorage.getItem('username') : null;
 
-  // obtener imagen de perfil al cargar
   useEffect(() => {
     const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
     setIsLoggedIn(loggedIn);
@@ -23,32 +24,23 @@ export default function ProfilePage() {
       fetch(`/api/user/${encodeURIComponent(email)}`)
         .then(res => res.json())
         .then(data => {
-          if (data.profile_image) {
-            setImageUrl(data.profile_image);
-          }
+          if (data.profile_image) setImageUrl(data.profile_image);
+          if (data.name) setUserName(data.name);
+          if (data.email) setUserEmail(data.email);
         })
         .catch(console.error);
     }
   }, [router, email]);
 
-  // subir nueva imagen
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) {
-      console.error('No file selected');
-      return;
-    }
-    if (!email || !name) {
-      console.error('Missing email or name in localStorage');
-      return;
-    }
+    if (!file || !email || !name) return;
 
     try {
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('upload_preset', 'profile_pics'); // tu preset en Cloudinary
+      formData.append('upload_preset', 'profile_pics');
 
-      // subir a cloudinary
       const res = await fetch(`https://api.cloudinary.com/v1_1/dzubudaum/image/upload`, {
         method: 'POST',
         body: formData,
@@ -59,19 +51,11 @@ export default function ProfilePage() {
 
       setImageUrl(data.secure_url);
 
-      // guardar en DB
-      const resUpdate = await fetch('/api/user/update', {
+      await fetch('/api/user/update', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          name,
-          profileImage: data.secure_url,
-        }),
+        body: JSON.stringify({ email, name, profileImage: data.secure_url }),
       });
-
-      const updateData = await resUpdate.json();
-      console.log('Update response:', updateData);
     } catch (error) {
       console.error('Error uploading image:', error);
     }
@@ -81,28 +65,34 @@ export default function ProfilePage() {
   if (!isLoggedIn) return null;
 
   return (
-    <div className="p-6">
+    <div className="p-6 flex flex-col items-center text-center">
       <h1 className="text-2xl font-bold mb-4">My Profile</h1>
-      <p>Welcome! Here you can manage your products.</p>
-
-      {/* input para subir archivo */}
-      <div className="mt-4">
-        <input type="file" accept="image/*" onChange={handleImageChange} />
-      </div>
-
-      {/* mostrar imagen */}
-      {imageUrl && (
-        <div className="mt-4">
-          <p className="mb-2">Uploaded Image:</p>
+      
+      {/* Foto de perfil */}
+      <div className="mb-4">
+        {imageUrl ? (
           <Image
             src={imageUrl}
             alt="Profile"
             width={150}
             height={150}
-            className="rounded-full border"
+            className="rounded-full border-4 border-gray-300 object-cover"
           />
-        </div>
-      )}
+        ) : (
+          <div className="w-[150px] h-[150px] rounded-full bg-gray-200 flex items-center justify-center text-gray-500">
+            No Image
+          </div>
+        )}
+      </div>
+
+      {/* Nombre y correo */}
+      <p className="text-lg font-semibold">{userName || name}</p>
+      <p className="text-gray-500">{userEmail || email}</p>
+
+      {/* Subir imagen */}
+      <div className="mt-4">
+        <input type="file" accept="image/*" onChange={handleImageChange} />
+      </div>
     </div>
   );
 }
