@@ -68,7 +68,7 @@ export default function ProfilePage() {
     <div className="p-6 flex flex-col items-center text-center">
       <h1 className="text-2xl font-bold mb-4">My Profile</h1>
       
-      {/* Foto de perfil */}
+      {/* foto de perfil */}
       <div className="mb-4">
         {imageUrl ? (
           <Image

@@ -2,7 +2,6 @@
 import { v2 as cloudinary } from 'cloudinary';
 import { NextResponse } from 'next/server';
 
-// config de cloudinary usando variables de entorno
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -27,7 +26,7 @@ async function uploadToCloudinary(file: File): Promise<string> {
   });
 }
 
-// método POST para recibir y subir imagen
+//  recibir y subir imagen
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();

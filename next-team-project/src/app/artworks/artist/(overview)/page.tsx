@@ -53,11 +53,11 @@ export default function ArtistsPage() {
             <Image
                 src={artist.image_url || '/artist-img.jpg'}
                 alt={artist.artist_name}
-                width={80} // antes 40
-                height={80} // antes 40
-                quality={100} // máxima calidad
+                width={80} 
+                height={80} 
+                quality={100} // calidad
                 className="rounded-full object-cover mr-4"
-                unoptimized // opcional si quieres que cargue la imagen tal cual desde Cloudinary
+                unoptimized 
             />
 
             {/* Artist name and product count */}
