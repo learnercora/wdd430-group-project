@@ -17,7 +17,7 @@ export default function ArtworkPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const page = parseInt(searchParams.get('page') || '1');
-  const initialSort = searchParams.get('sort') || 'asc';
+  const initialSort = searchParams.get('sort') || 'desc';
   const initialSearch = searchParams.get('search') || '';
   const initialCategory = searchParams.get('category') || '';
 

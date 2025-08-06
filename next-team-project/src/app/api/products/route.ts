@@ -7,7 +7,7 @@ export async function GET(req: Request) {
   const limit = 15;
   const offset = (page - 1) * limit;
 
-  const sort = searchParams.get('sort') || 'asc';
+  const sort = searchParams.get('sort') || 'desc';
   const search = searchParams.get('search') || '';
   const category = searchParams.get('category') || '';
 
