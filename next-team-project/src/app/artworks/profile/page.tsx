@@ -25,6 +25,10 @@ export default function ProfilePage() {
   const [bioInput, setBioInput] = useState('');
   const [savingBio, setSavingBio] = useState(false);
 
+  const [editingName, setEditingName] = useState(false);
+  const [newName, setNewName] = useState('');
+  const [savingName, setSavingName] = useState(false);
+
   const [categories, setCategories] = useState<string[]>([]);
   const [productName, setProductName] = useState('');
   const [productPrice, setProductPrice] = useState('');
@@ -52,7 +56,10 @@ export default function ProfilePage() {
         .then(d => {
           if (!d) return;
           if (d.profile_image) setImageUrl(d.profile_image);
-          if (d.name) setUserName(d.name);
+          if (d.name) {
+            setUserName(d.name);
+            setNewName(d.name);
+          }
           if (d.email) setUserEmail(d.email);
           setBio(typeof d.description === 'string' ? d.description : '');
         })
@@ -136,6 +143,25 @@ export default function ProfilePage() {
     }
   };
 
+  const handleSaveName = async () => {
+    if (!email || !newName.trim()) return;
+    try {
+      setSavingName(true);
+      const res = await fetch('/api/user/update-name', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, name: newName }),
+      });
+      if (!res.ok) throw new Error('');
+      setUserName(newName.trim());
+      localStorage.setItem('username', newName.trim());
+      setEditingName(false);
+    } catch {
+    } finally {
+      setSavingName(false);
+    }
+  };
+
   const handleSaveProduct = async () => {
     if (!productName.trim() || !productPrice.trim() || !productCategory || !email || !name) return;
     if (uploadingProductImage) return;
@@ -188,7 +214,52 @@ export default function ProfilePage() {
         )}
       </div>
 
-      <p className="text-lg font-semibold">{userName || name}</p>
+      <div className="flex items-center gap-2 mb-1">
+        {editingName ? (
+          <>
+            <input
+              type="text"
+              className="border rounded px-2 py-1"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+            />
+            <button
+              onClick={handleSaveName}
+              disabled={savingName || !newName.trim()}
+              className="px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+            >
+              {savingName ? 'Saving…' : 'Save'}
+            </button>
+            <button
+              onClick={() => {
+                setEditingName(false);
+                setNewName(userName || name || '');
+              }}
+              className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
+            >
+              Cancel
+            </button>
+          </>
+        ) : (
+          <>
+            <p className="text-lg font-semibold">{userName || name}</p>
+            <button
+              aria-label="edit name"
+              onClick={() => {
+                setNewName(userName || name || '');
+                setEditingName(true);
+              }}
+              className="p-1 rounded hover:bg-gray-100"
+              title="Edit name"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="currentColor" className="text-gray-500">
+                <path d="M13.586 3.586a2 2 0 0 1 2.828 2.828l-8.586 8.586a2 2 0 0 1-.878.507l-3.293.94a1 1 0 0 1-1.232-1.232l.94-3.293a2 2 0 0 1 .507-.878l8.586-8.586zM12 5l3 3" />
+              </svg>
+            </button>
+          </>
+        )}
+      </div>
+
       <p className="text-gray-500">{userEmail || email}</p>
 
       <div className="mt-4">
