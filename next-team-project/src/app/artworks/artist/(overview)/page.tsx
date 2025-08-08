@@ -53,11 +53,11 @@ export default function ArtistsPage() {
             <Image
                 src={artist.image_url || '/artist-img.jpg'}
                 alt={artist.artist_name}
-                width={80} 
-                height={80} 
-                quality={100} // calidad
-                className="rounded-full object-cover mr-4"
-                unoptimized 
+                width={80}
+                height={80}
+                quality={100}
+                className="w-20 h-20 rounded-full object-cover mr-4 flex-shrink-0"
+                unoptimized
             />
 
             {/* Artist name and product count */}

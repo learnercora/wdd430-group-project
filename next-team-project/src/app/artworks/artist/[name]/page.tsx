@@ -8,7 +8,7 @@ interface Artist {
   artist_name: string;
   artist_description: string;
   product_count: number;
-  image_url?: string; // ahora puede venir desde la BD
+  image_url?: string; 
 }
 
 export default function ArtistDetailPage() {
@@ -43,8 +43,8 @@ export default function ArtistDetailPage() {
         alt={artist.artist_name}
         width={150}
         height={150}
-        className="rounded-full object-cover"
-      />
+        className="w-50 h-40 rounded-full object-cover mr-4 flex-shrink-0"
+        />
       <h1 className="text-2xl font-bold">{artist.artist_name}</h1>
       <p className="text-gray-600">{artist.artist_description}</p>
       <p className="text-gray-500">{artist.product_count} products</p>
