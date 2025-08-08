@@ -88,7 +88,7 @@ export default function ProfilePage() {
 
   return (
     <div className="p-6 flex flex-col items-center text-center">
-      <h1 className="text-2xl font-bold mb-5">my profile</h1>
+      <h1 className="text-2xl font-bold mb-5">My profile</h1>
 
       {/* circular */}
       <div className="mb-4 rounded-full overflow-hidden border-4 border-gray-300 w-[150px] h-[150px]">
@@ -116,7 +116,7 @@ export default function ProfilePage() {
 
       {/* about me */}
       <div className="w-full max-w-xl mt-8">
-        <p className="text-sm text-gray-500 mb-2">about me</p>
+        <p className="text-sm text-gray-500 mb-2">About Me</p>
 
         {/* shown bio */}
         <div className="border rounded px-4 py-3 min-h-[48px] whitespace-pre-wrap mb-3">
@@ -125,7 +125,7 @@ export default function ProfilePage() {
 
         {/* editor */}
         <textarea
-          placeholder="write your bio..."
+          placeholder="Write your description..."
           className="w-full border rounded p-3 mb-3"
           rows={4}
           value={bioInput}
@@ -136,7 +136,7 @@ export default function ProfilePage() {
           disabled={savingBio || !bioInput.trim()}
           className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 disabled:opacity-50"
         >
-          {savingBio ? 'saving…' : 'save'}
+          {savingBio ? 'saving…' : 'Save'}
         </button>
       </div>
     </div>
