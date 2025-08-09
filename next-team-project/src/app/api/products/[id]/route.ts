@@ -83,3 +83,32 @@ export async function PUT(
     return NextResponse.json({ error: 'Error updating product' }, { status: 500 });
   }
 }
+
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const productId = Number(params.id);
+    if (!Number.isFinite(productId)) {
+      return NextResponse.json({ error: 'Invalid product ID' }, { status: 400 });
+    }
+
+    const check = await sql`
+      SELECT id FROM products WHERE id = ${productId} LIMIT 1
+    `;
+    if (check.rows.length === 0) {
+      return NextResponse.json({ error: 'Product not found' }, { status: 404 });
+    }
+
+    await sql`
+      DELETE FROM products WHERE id = ${productId}
+    `;
+
+    return NextResponse.json({ message: 'Product deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    return NextResponse.json({ error: 'Error deleting product' }, { status: 500 });
+  }
+}

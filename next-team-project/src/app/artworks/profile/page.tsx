@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
@@ -39,6 +39,8 @@ export default function ProfilePage() {
   const [uploadingProductImage, setUploadingProductImage] = useState(false);
 
   const [myProducts, setMyProducts] = useState<MyProduct[]>([]);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const email = typeof window !== 'undefined' ? localStorage.getItem('email') : null;
   const name = typeof window !== 'undefined' ? localStorage.getItem('username') : null;
@@ -199,6 +201,19 @@ export default function ProfilePage() {
     await refreshMine();
   };
 
+  const handleDeleteProduct = async (id: number) => {
+    try {
+      const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Failed to delete product');
+      await refreshMine();
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  
+
   if (isLoggedIn === null) return <p>checking…</p>;
   if (!isLoggedIn) return null;
 
@@ -318,7 +333,7 @@ export default function ProfilePage() {
           value={productDescription}
           onChange={(e) => setProductDescription(e.target.value)}
         />
-        <input type="file" accept="image/*" onChange={handleProductImageChange} className="mb-3" />
+        <input type="file" accept="image/*" ref={fileInputRef} onChange={handleProductImageChange} className="mb-3" />
         {productImage && (
           <div className="mb-3">
             <Image src={productImage} alt="product" width={150} height={150} className="object-cover rounded" />
@@ -371,6 +386,22 @@ export default function ProfilePage() {
                   }}
                 >
                   Edit
+                </button>
+                <button
+                  className="px-3 py-1 rounded border hover:bg-gray-50"
+                  onClick={() => {
+                    setProductId(null);
+                    setProductName('');
+                    setProductPrice('');
+                    setProductCategory('');
+                    setProductDescription('');
+                    setProductImage(null);
+                    fileInputRef.current && (fileInputRef.current.value = '');
+                    handleDeleteProduct(p.id);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                >
+                  Delete
                 </button>
               </li>
             ))}
