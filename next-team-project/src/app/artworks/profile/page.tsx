@@ -202,11 +202,13 @@ export default function ProfilePage() {
   };
 
   const handleDeleteProduct = async (id: number) => {
+    const ok = window.confirm('Delete this product?');
+    if (!ok) return;
+  
     try {
       const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
       if (!res.ok) throw new Error('Failed to delete product');
       await refreshMine();
-
     } catch (error) {
       console.error(error);
     }
@@ -396,7 +398,7 @@ export default function ProfilePage() {
                     setProductCategory('');
                     setProductDescription('');
                     setProductImage(null);
-                    fileInputRef.current && (fileInputRef.current.value = '');
+                    //fileInputRef.current && (fileInputRef.current.value = '');
                     handleDeleteProduct(p.id);
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}

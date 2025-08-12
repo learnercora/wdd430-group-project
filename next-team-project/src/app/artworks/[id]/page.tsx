@@ -3,6 +3,8 @@
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Reviews from '../../components/reviews';
+
 
 interface Product {
   id: number;
@@ -58,46 +60,7 @@ export default function ProductDetailPage() {
         By <span className="font-medium">{product.artist_name}</span>
       </p>
 
-      {/* comentarios y rating */}
-      <div className="border-t pt-6">
-        <h2 className="text-xl font-semibold mb-4">Leave a Review</h2>
-        <p className="mb-4 text-gray-500">
-          You must be logged in to leave a comment and rating.
-        </p>
-
-        {/* estrellas vacías */}
-        <div className="flex gap-1 mb-4">
-          {[...Array(5)].map((_, i) => (
-            <svg
-              key={i}
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="w-6 h-6 text-gray-400"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.518 4.674a1 1 0 00.95.69h4.911c.969 0 1.371 1.24.588 1.81l-3.977 2.888a1 1 0 00-.364 1.118l1.518 4.674c.3.921-.755 1.688-1.54 1.118l-3.977-2.888a1 1 0 00-1.176 0l-3.977 2.888c-.784.57-1.838-.197-1.539-1.118l1.518-4.674a1 1 0 00-.364-1.118L2.982 10.1c-.783-.57-.38-1.81.588-1.81h4.911a1 1 0 00.95-.69l1.518-4.674z"
-              />
-            </svg>
-          ))}
-        </div>
-
-        <textarea
-          placeholder="Write your comment..."
-          disabled
-          className="w-full border border-gray-300 rounded-lg p-3 mb-4 bg-gray-100"
-        ></textarea>
-        <button
-          disabled
-          className="px-4 py-2 bg-gray-400 text-white rounded cursor-not-allowed"
-        >
-          Submit Review
-        </button>
+      <Reviews productId={Number(product.id)} />     
       </div>
-    </div>
   );
 }
